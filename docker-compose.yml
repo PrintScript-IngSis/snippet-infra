@@ -1,0 +1,72 @@
+version: '3.5'
+
+services:
+  snippet-runner:
+    container_name: 'snippet-runner'
+    image: ghcr.io/printscript-ingsis/snippet-runner:main
+    restart: always
+    ports:
+      - '8082:8082'
+
+  snippet-permission:
+    container_name: 'snippet-permission'
+    image: ghcr.io/printscript-ingsis/snippet-permission:main
+    restart: always
+    ports:
+      - '8081:8081'
+    environment:
+      POSTGRES_USER: ${PERMISSION_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${PERMISSION_POSTGRES_PASSWORD}
+      DB_NAME: ${PERMISSION_POSTGRES_DB}
+      DB_HOST: ${PERMISSION_DB_HOST}
+      DB_PORT: ${PERMISSION_DB_PORT}
+    depends_on:
+      - permission-db
+
+  snippet-manager:
+    container_name: 'snippet-manager'
+    image: ghcr.io/printscript-ingsis/snippet-manager:main
+    restart: always
+    ports:
+      - '8080:8080'
+    environment:
+      POSTGRES_USER: ${MANAGER_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${MANAGER_POSTGRES_PASSWORD}
+      DB_NAME: ${MANAGER_POSTGRES_DB}
+      DB_HOST: ${MANAGER_DB_HOST}
+      DB_PORT: ${MANAGER_DB_PORT}
+    depends_on:
+      - manager-db
+      - snippet-permission
+      - snippet-runner
+
+  permission-db:
+    container_name: 'permission-db-postgres'
+    image: postgres:alpine
+    restart: always
+    ports:
+      - '5433:5432'
+    environment:
+      POSTGRES_USER: ${PERMISSION_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${PERMISSION_POSTGRES_PASSWORD}
+      POSTGRES_DB: ${PERMISSION_POSTGRES_DB}
+    volumes:
+      - permission-db:/var/lib/postgresql/data
+
+  manager-db:
+    container_name: 'manager-db-postgres'
+    image: postgres:alpine
+    restart: always
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: ${MANAGER_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${MANAGER_POSTGRES_PASSWORD}
+      POSTGRES_DB: ${MANAGER_POSTGRES_DB}
+    volumes:
+      - manager-db:/var/lib/postgresql/data
+
+volumes:
+  permission-db:
+  manager-db:
+
