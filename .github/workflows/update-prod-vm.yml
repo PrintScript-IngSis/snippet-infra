@@ -1,0 +1,23 @@
+name: Update repository and deploy to prod VM
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  pull-repo-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: execute ssh commands
+        uses: appleboy/ssh-action@v.1.0.3
+        with:
+          host: ${{ secrets.PROD_VM_HOST }}
+          username: ${{ secrets.PROD_VM_USER }}
+          key: ${{ secrets.PROD_VM_PRIVATE_KEY }}
+          port: ${{ secrets.PROD_VM_PORT }}
+          script: |
+            cd /app/snippet-infra
+            sudo git pull
+            sudo docker-compose pull
+            sudo docker-compose up -d
