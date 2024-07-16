@@ -13,7 +13,7 @@ jobs:
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.PROD_VM_HOST }}
-          username: ${{ secrets.PROD_VM_USER }}
+          username: ${{ secrets.PROD_VM_USERNAME }}
           key: ${{ secrets.PROD_VM_PRIVATE_KEY }}
           port: ${{ secrets.PROD_VM_PORT }}
           script: |
