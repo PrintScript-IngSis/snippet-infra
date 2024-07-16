@@ -17,7 +17,7 @@ jobs:
           key: ${{ secrets.PROD_VM_PRIVATE_KEY }}
           port: ${{ secrets.PROD_VM_PORT }}
           script: |
-            cd /app/snippet-infra
+            cd app/snippet-infra
             sudo git checkout main
             sudo git pull
             sudo docker-compose pull
