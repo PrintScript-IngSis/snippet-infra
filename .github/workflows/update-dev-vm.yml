@@ -1,4 +1,4 @@
-name: Update repository and deploy to prod VM
+name: Update repository and deploy to dev VM
 
 on:
   push:
