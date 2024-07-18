@@ -3,14 +3,14 @@ version: '3.5'
 services:
   snippet-runner:
     container_name: 'snippet-runner'
-    image: ghcr.io/printscript-ingsis/snippet-runner:main
+    image: ghcr.io/printscript-ingsis/snippet-runner:${IMAGE_TAG}
     restart: always
     ports:
       - '8082:8082'
 
   snippet-permission:
     container_name: 'snippet-permission'
-    image: ghcr.io/printscript-ingsis/snippet-permission:main
+    image: ghcr.io/printscript-ingsis/snippet-permission:${IMAGE_TAG}
     restart: always
     ports:
       - '8081:8081'
