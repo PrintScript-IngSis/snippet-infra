@@ -71,6 +71,8 @@ services:
     image: nginx:alpine
     ports:
       - '80:80'
+    environment:
+        - DOMAIN_NAME=${DOMAIN_NAME}
     volumes:
       - ./nginx/conf:/etc/nginx/conf.d
       - ./static:/usr/share/nginx/html:ro
@@ -89,7 +91,7 @@ services:
     volumes:
       - ./certbot/conf:/etc/letsencrypt
       - ./certbot/www:/var/www/certbot
-    command: certonly --webroot -w /var/www/certbot/ --force-renewal --email monosteve123@gmail.com -d ${DOMAIN_NAME} --agree-tos
+    command: certonly --webroot -w /var/www/certbot/ --force-renewal --email monosteve123@gmail.com -d $DOMAIN_NAME --agree-tos
 
 volumes:
   permission-db:
