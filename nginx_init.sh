@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Paths to the certificate files
-CERT_FILE="/etc/nginx/ssl/live/${DOMAIN_NAME}/fullchain.pem"
-KEY_FILE="/etc/nginx/ssl/live/${DOMAIN_NAME}/privkey.pem"
+CERT_FILE="/etc/letsencrypt/live/${DOMAIN_NAME}/fullchain.pem"
+KEY_FILE="/etc/letsencrypt/live/${DOMAIN_NAME}/privkey.pem"
 
 
 SECURED_CONF="/etc/nginx/conf.d/server.conf.template"
