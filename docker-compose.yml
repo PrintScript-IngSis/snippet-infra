@@ -35,10 +35,15 @@ services:
       DB_NAME: ${MANAGER_POSTGRES_DB}
       DB_HOST: ${MANAGER_DB_HOST}
       DB_PORT: ${MANAGER_DB_PORT}
+      BLOB_URL: ${BLOB_URL}
+      REDIS_HOST: ${REDIS_HOST}
+      PERMISSION_URL: ${PERMISSION_URL}
+      RUNNER_URL: ${RUNNER_URL}
     depends_on:
       - manager-db
       - snippet-permission
       - snippet-runner
+      - redis
 
   permission-db:
     container_name: 'permission-db-postgres'
@@ -96,6 +101,35 @@ services:
       - ./certbot/www:/var/www/certbot
     command: certonly --webroot -w /var/www/certbot/ --force-renewal --email monosteve123@gmail.com -d $DOMAIN_NAME --agree-tos
 
+  asset-service:
+    container_name: "asset-service"
+    image: ghcr.io/austral-ingsis/snippet-asset-service:latest
+    ports:
+      - "8080:8080"
+    environment:
+      AZURE_HOST: "http://azurite"
+      NEW_RELIC_AGENT_ENABLED: false
+
+  azurite:
+    container_name: "azurite"
+    image: mcr.microsoft.com/azure-storage/azurite
+    hostname: azurite
+    restart: always
+    ports:
+      - "10000:10000"
+      - "10001:10001"
+      - "10002:10002"
+    volumes:
+      - azurite_data:/data
+
+  redis:
+    container_name: "redis"
+    image: redis:6-alpine
+    ports:
+      - "6379:6379"
+
 volumes:
   permission-db:
   manager-db:
+  azurite_data:
+    external: false
