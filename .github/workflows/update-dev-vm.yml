@@ -1,4 +1,4 @@
-name: Update repository and deploy to dev VM
+name: Update repository and deploy to dev VM today
 
 on:
   push:
