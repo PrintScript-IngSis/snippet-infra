@@ -85,6 +85,7 @@ services:
       - ./certbot/conf:/etc/letsencrypt
       - ./certbot/www:/var/www/certbot
       - ./nginx_init.sh:/nginx_init.sh
+      - dist-volume:/usr/share/nginx/dist
     depends_on:
       - snippet-manager
       - snippet-permission
@@ -128,8 +129,20 @@ services:
     ports:
       - "6379:6379"
 
+
+  printscript-ui:
+    container_name: "printscript-ui"
+    image: ghcr.io/printscript-ingsis/printscript13-ui:${IMAGE_TAG}
+    restart: always
+    ports:
+      - "5173:5173"
+    volumes:
+      - dist-volume:/app/dist
+
+
 volumes:
   permission-db:
   manager-db:
   azurite_data:
     external: false
+  dist-volume:
