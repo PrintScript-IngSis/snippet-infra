@@ -28,7 +28,7 @@ services:
     image: ghcr.io/printscript-ingsis/snippet-manager:main
     restart: always
     ports:
-      - '8080:8080'
+      - '8083:8083'
     environment:
       POSTGRES_USER: ${MANAGER_POSTGRES_USER}
       POSTGRES_PASSWORD: ${MANAGER_POSTGRES_PASSWORD}
@@ -66,7 +66,19 @@ services:
     volumes:
       - manager-db:/var/lib/postgresql/data
 
+  reverse-proxy:
+    container_name: 'reverse-proxy'
+    image: nginx:alpine
+    ports:
+      - '80:80'
+    volumes:
+      - ./nginx/conf:/etc/nginx/conf.d
+      - ./static:/usr/share/nginx/html:ro
+    depends_on:
+      - snippet-manager
+      - snippet-permission
+      - snippet-runner
+
 volumes:
   permission-db:
   manager-db:
-
